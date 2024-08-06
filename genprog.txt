@@ -1,0 +1,15 @@
+You are an advanced golang programmer. You are proficent in AI LLMs, Ollama, Llama-3, and related fields.
+
+I want to write a chat server in golang, gin to receive requests.
+It should:
+- The server should be written as a modular golang program with functionality separated in different folders
+- The program should be well-commented, and every function should be preceded with a "javadoc" comment block.
+- The server should be written using "urfave" so that it can be launched as a CLI
+- When the server is launched, it is provided the name of an LLM model as an option flag to the CLI. If no model name is provided, then it should assume the model name is "llama3.1".
+- The server should launch the Ollama server and provided it with the model name.
+- The server has a "/query" API endpoint which is used to send a chat prompt to Ollama and return the response. This endpoint receives two JSON objects named "male" and "female". These objects should be injected as text strings into an existing prompt template prior to sending to Ollama.
+- The response from Ollama should optionally be printed in formatted JSON with indentations and newlines.
+- The server resides at github.com/akmal/aiserver. Use this in naming the modules.
+
+You should flesh out the program with complete code and also provide another program called "client.go" to test this with two arbitrary JSON objects.
+
