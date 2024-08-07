@@ -22,11 +22,18 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Printf("Sending prompt...\n")
 	resp, err := http.Post("http://localhost:8080/prompt", "application/json", bytes.NewBuffer(data))
 	if err != nil {
 		fmt.Printf("Error sending request: %v\n", err)
 		os.Exit(1)
 	}
+
+	if resp.StatusCode != http.StatusOK {
+		fmt.Printf("Error response from server: %v, %s\n", resp.Status, resp.Body)
+		os.Exit(2)
+	}
+
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {

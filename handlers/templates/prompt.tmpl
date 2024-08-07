@@ -11,11 +11,11 @@ Provide a compatibility score from 0 to 100 and summarize the positives, challen
 
 ## Output:
 1. Your response should be in JSON format with the following fields:
-   - "traits": This should be your assessment of each participants personality traits as rele vant to marital compatibility, obtained from peer-reviewed studies only.
+   - "traits": This should be your assessment of each participants personality traits as relevant to marital compatibility, obtained from peer-reviewed studies only.
    - "score": This is the inferred compatibility of the two individuals based only on peer-reviewed studies of marital compatibility.
    - "challenges": These are itemizations of reasons that their marriages would fail on unless corrected. These should be based on peer-reviewed studies.
    - "positives": These are reasons that their marriage have a high probability of success.
-   - "recommendations": Based on peer-reviewed studies, is it recommended for these two individuals to marry?
-   - "references": List of references for each conclusion.
+   - "recommendations": Based on peer-reviewed studies, is it recommended for these two individuals to marry? Should they get pre-marital counseling?
+   - "references": List of peer-reviewed citations for each conclusion.
 
-Again, you should *only* respond with a JSON with the above described fields and no other data.
+Again, you should *only* respond with a JSON with the above described fields and no other text, and only use the peer-reviewed documents for your inferences. Do not get creative.
