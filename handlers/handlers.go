@@ -112,9 +112,13 @@ func PromptHandler(c *gin.Context, debug bool) {
 	}
 
 	prompt := promptBuffer.String()
-	fmt.Printf("Prompt being passed to Ollama: %s\n", prompt)
+	if debug {
+		fmt.Printf("Prompt being passed to Ollama: %s\n", prompt)
+	}
 
+	fmt.Println("Querying Ollama...")
 	response, err := ollama.QueryOllama(prompt)
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
