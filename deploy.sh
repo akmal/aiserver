@@ -3,7 +3,6 @@
 #
 # This script will build bindings for OSX and Linux
 #
-set -e
 
 COLOR_RESET="\033[0m"
 COLOR_RED="\033[38;5;9m"
@@ -13,10 +12,13 @@ COLOR_LIGHTGREEN="\033[1;32m"
 COMMANDS="aiserver client"
 # shellcheck disable=SC2046
 ROOT=$(cd $(dirname $0); pwd)
-OUT_DIR=${OUT_DIR:-${ROOT}/bin}
-BUILD_TIME=`date | sed -e 's/ /_/g'`
-TARGET_OS=${TARGET_OS:-darwin}
-TARGET_ARCH=${TARGET_ARCH:-arm64}
+BINDIR=${BINDIR:-${ROOT}/bin}
+AI_USER="myomiaiadmin"
+AI_PASSWORD=${AI_PASSWORD:-specify_ai_password_in_env}
+AI_SERVER="ai.mo"
+DESTDIR=${DESTDIR:-/home/${AI_USER}/myomiai_servers}
+DEST=${AI_USER}@${AI_SERVER}:${DESTDIR}
+SSHPASS=/opt/homebrew/bin/sshpass
 
 error() {
     echo -e "${COLOR_RED}ERROR: $1${COLOR_RESET}" >&2
@@ -40,50 +42,18 @@ _trap() {
   exit 1
 }
 
-build() {
+deploy() {
     local CMD=$1
-    info "Building ${CMD} for ${TARGET_OS} ${TARGET_ARCH}..."
-
-    if [[ "$TARGET_OS" = "darwin" ]] ; then
-        local OUTPUT_FILE="$CMD"
-    else
-        local OUTPUT_FILE="${CMD}.linux"
-    fi
-
-    # ensure output dir exist
-    mkdir -p ${OUT_DIR}
-    local OUTPUT_PATH="${OUT_DIR}/${OUTPUT_FILE}"
-
-    # build
-    CGO_ENABLED=0 go build -ldflags "-s -w -X main.BuildTime=${BUILD_TIME} -X main.Version=${VERSION}" \
-             -o $OUTPUT_PATH ${ROOT}/${CMD}.go
-    if [ $? -ne 0 ] ; then
-        error "Build Failed!"
-    fi
-
-    chmod +x ${OUTPUT_PATH}
+    local source=${BINDIR}/${CMD}.linux
+    local dest=${DEST}/${CMD}
+    info "Deploying ${source} to ${dest}..."
+    ${SSHPASS} -p ${AI_PASSWORD} scp ${source} ${dest}
 }
 
 trap '_trap' SIGINT SIGTERM
 
-while getopts ":o:a:" flag ; do
-    case $flag in
-        o)
-            TARGET_OS=${OPTARG}
-            ;;
-        a)
-            TARGET_ARCH=${OPTARG}
-            ;;
-        *)
-            echo "Usage: $0 [-a architecture - 386, amd64, arm] [-o target OS - darwin, linux]" >&2
-            exit 1
-            ;;
-    esac
-done
-
 cd ${ROOT}
 for CMD in ${COMMANDS} ; do
-  echo Build ${CMD}
-  GOOS=${TARGET_OS} GOARCH=${TARGET_ARCH} build $CMD
+  deploy ${CMD}
 done
 

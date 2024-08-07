@@ -15,8 +15,8 @@ COMMANDS="aiserver client"
 ROOT=$(cd $(dirname $0); pwd)
 OUT_DIR=${OUT_DIR:-${ROOT}/bin}
 BUILD_TIME=`date | sed -e 's/ /_/g'`
-TARGET_OS=${TARGET_OS:-darwin}
-TARGET_ARCH=${TARGET_ARCH:-arm64}
+TARGET_OS=${TARGET_OS:-linux}
+TARGET_ARCH=${TARGET_ARCH:-x86_64}
 
 error() {
     echo -e "${COLOR_RED}ERROR: $1${COLOR_RESET}" >&2
@@ -84,6 +84,6 @@ done
 
 cd ${ROOT}
 for CMD in ${COMMANDS} ; do
-  build $CMD
+  GOOS=${TARGET_OS} GOARCH=${TARGET_ARCH} build ${CMD}
 done
 
