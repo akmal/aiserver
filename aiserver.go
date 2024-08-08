@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	modelName := flag.String("model", "llama3.1", "Name of the LLM model to use")
+	modelName := flag.String("model", "mistral-nemo", "Name of the LLM model to use")
 	debug := flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
 
