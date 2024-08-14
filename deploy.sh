@@ -16,7 +16,7 @@ BINDIR=${BINDIR:-${ROOT}/bin}
 AI_USER="myomiaiadmin"
 AI_PASSWORD=${AI_PASSWORD:-specify_ai_password_in_env}
 AI_SERVER="ai.mo"
-DESTDIR=${DESTDIR:-/home/${AI_USER}/myomiai_servers}
+DESTDIR=${DESTDIR:-/home/${AI_USER}/myomiai_servers/aiserver}
 DEST=${AI_USER}@${AI_SERVER}:${DESTDIR}
 SSHPASS=/opt/homebrew/bin/sshpass
 
